@@ -1,38 +1,294 @@
-.App {
-  text-align: center;
+/* src/App.css */
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+    'Segoe UI', sans-serif;
+  color: #e5e7eb;
+  background: #020617;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body,
+html,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
+.app-root {
+  position: relative;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 24px;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #1e3a8a 0, #020617 55%, #020617 100%);
+  color: #e5e7eb;
+}
+
+/* soft blobs in background */
+.gradient-bg::before,
+.gradient-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(80px);
+  opacity: 0.8;
+}
+
+.gradient-bg::before {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #6366f1, #7c3aed);
+  top: -120px;
+  right: -80px;
+}
+
+.gradient-bg::after {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, #4f46e5, #06b6d4);
+  bottom: -140px;
+  left: -60px;
+}
+
+.gradient-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  padding: 24px 24px 20px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.9),
+    0 0 0 1px rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(22px);
+}
+
+.card-header {
+  margin-bottom: 18px;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(120deg, #bfdbfe, #e9d5ff, #a5b4fc);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.subtitle span {
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+/* ===========================================================
+   INPUT + BUTTON ROW (FIXED FOR RESPONSIVENESS)
+   =========================================================== */
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+
+  /* FIX #1 — allow wrapping if space gets tight */
+  flex-wrap: wrap;
+}
+
+.input-row input {
+  flex: 1;
+  width: 100%;
+   /* allows shrinking without breaking layout */
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 10px 14px;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.input-row input::placeholder {
+  color: #6b7280;
+}
+
+.input-row input:focus {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+  background: rgba(15, 23, 42, 0.98);
+}
+
+.input-row button {
+  border-radius: 999px;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
+  box-shadow: 0 14px 32px rgba(79, 70, 229, 0.5);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.15s;
+  white-space: nowrap;
+
+  /* FIX #2 — prevents button from shrinking or overflowing */
+  flex-shrink: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.input-row button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(79, 70, 229, 0.75);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.input-row button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+}
+
+.input-row button:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* FIX #3 — Mobile layout: stack input and button */
+@media (max-width: 480px) {
+  .input-row {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  .input-row button {
+    width: 100%;
   }
+}
+
+/* ===========================================================
+   TOOLBAR
+   =========================================================== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 8px;
+}
+
+.toolbar button {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s;
+}
+
+.toolbar button:hover:not(:disabled) {
+  background: rgba(30, 64, 175, 0.9);
+  border-color: rgba(129, 140, 248, 0.9);
+}
+
+.toolbar button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.toolbar .count {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* ===========================================================
+   ERROR BOX
+   =========================================================== */
+.error {
+  margin-top: 6px;
+  margin-bottom: 4px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  color: #fecaca;
+}
+
+/* ===========================================================
+   TODO LIST
+   =========================================================== */
+.todo-list {
+  list-style: none;
+  padding: 8px 0 0;
+  margin: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
+}
+
+.todo-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.8);
+  border-radius: 999px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.18), transparent 55%);
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  margin-bottom: 6px;
+}
+
+.todo-item .bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 6px;
+  background: radial-gradient(circle, #a5b4fc, #4f46e5);
+  flex-shrink: 0;
+}
+
+.todo-item .text {
+  font-size: 0.92rem;
+  color: #e5e7eb;
+  word-break: break-word;
+}
+
+.empty-state {
+  padding: 20px 10px 14px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9ca3af;
 }
